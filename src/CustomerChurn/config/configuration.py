@@ -1,6 +1,7 @@
 from CustomerChurn.constants import *
 from CustomerChurn.utils.common import read_yaml, create_directories
-from CustomerChurn.entity.config_entity import (DataIngestionConfig, DataValidationConfig)
+from CustomerChurn.entity.config_entity import (DataIngestionConfig, DataValidationConfig,
+                                                DataPreprocessingConfig)
 
 
 class ConfigurationManager:
@@ -81,3 +82,25 @@ class ConfigurationManager:
         )
         
         return data_validation_config
+    
+    def get_data_preprocessing_config(self) -> DataPreprocessingConfig:
+        """
+        Retrieves the data preprocessing configuration from the ConfigurationManager object.
+        
+        This method reads the data preprocessing configuration from the config attribute, 
+        creates the root directory specified in the configuration if it does not exist, 
+        and returns a DataPreprocessingConfig object containing the configuration details.
+        
+        Returns:
+            DataPreprocessingConfig: The data preprocessing configuration object.
+        """
+        config = self.config.data_preprocessing
+        
+        create_directories([config.root_dir])
+        
+        data_preprocessing_config = DataPreprocessingConfig(
+            root_dir = config.root_dir,
+            data_path = config.data_path
+        )
+        
+        return data_preprocessing_config
