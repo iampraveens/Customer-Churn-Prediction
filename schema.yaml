@@ -19,6 +19,7 @@ COLUMNS:
   PaymentMethod: object
   MonthlyCharges: float64
   TotalCharges: object
+  Churn: object
 
   TARGET COLUMN:
     name: Churn

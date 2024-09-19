@@ -1,6 +1,6 @@
 from CustomerChurn.constants import *
 from CustomerChurn.utils.common import read_yaml, create_directories
-from CustomerChurn.entity.config_entity import DataIngestionConfig
+from CustomerChurn.entity.config_entity import (DataIngestionConfig, DataValidationConfig)
 
 
 class ConfigurationManager:
@@ -56,3 +56,28 @@ class ConfigurationManager:
         )
         
         return data_ingestion_config
+    
+    def get_data_validation_config(self) -> DataValidationConfig:
+        """
+        Retrieves the data validation configuration from the ConfigurationManager object.
+        
+        This method reads the data validation configuration from the config attribute, 
+        creates the root directory specified in the configuration if it does not exist, 
+        and returns a DataValidationConfig object containing the configuration details.
+        
+        Returns:
+            DataValidationConfig: The data validation configuration object.
+        """
+        config = self.config.data_validation
+        schema = self.schema.COLUMNS
+        
+        create_directories([config.root_dir])
+        
+        data_validation_config = DataValidationConfig(
+            root_dir = config.root_dir,
+            unzip_data_dir = config.unzip_data_dir,
+            STATUS_FILE = config.STATUS_FILE,
+            all_schema=schema
+        )
+        
+        return data_validation_config
