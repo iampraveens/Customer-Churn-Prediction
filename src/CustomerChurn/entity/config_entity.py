@@ -19,3 +19,8 @@ class DataValidationConfig:
 class DataPreprocessingConfig:
     root_dir: Path
     data_path: Path
+    
+@dataclass(frozen=True)
+class DataTransformationConfig:
+    root_dir: Path
+    data_path: Path

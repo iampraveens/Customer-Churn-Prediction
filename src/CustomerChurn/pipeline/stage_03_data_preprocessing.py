@@ -1,6 +1,7 @@
 from CustomerChurn.config.configuration import ConfigurationManager
 from CustomerChurn.components.data_preprocessing import DataPreprocessing
 from CustomerChurn import logger
+from pathlib import Path
 
 STAGE_NAME = "Data Preprocessing stage"
 
@@ -21,10 +22,20 @@ class DataPreprocessingTrainingPipeline:
         a ConfigurationManager object, retrieving the data preprocessing configuration, 
         creating a DataPreprocessing object, and calling its data_cleaning method.
         """
-        config = ConfigurationManager()
-        data_preprocessing_config = config.get_data_preprocessing_config()
-        data_preprocessing = DataPreprocessing(config=data_preprocessing_config)
-        data_preprocessing.data_cleaning()
+        try:
+            with open(Path("artifacts/data_validation/status.txt"), "r") as f:
+                status = f.read().split(" ")[-1]
+                
+            if status == "True":
+                config = ConfigurationManager()
+                data_preprocessing_config = config.get_data_preprocessing_config()
+                data_preprocessing = DataPreprocessing(config=data_preprocessing_config)
+                data_preprocessing.data_cleaning()
+            else:
+                raise Exception("You data schema is not valid")
+            
+        except Exception as e:
+            print(e)
         
 if __name__ == '__main__':
     try:

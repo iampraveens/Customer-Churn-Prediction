@@ -1,7 +1,7 @@
 from CustomerChurn.constants import *
 from CustomerChurn.utils.common import read_yaml, create_directories
 from CustomerChurn.entity.config_entity import (DataIngestionConfig, DataValidationConfig,
-                                                DataPreprocessingConfig)
+                                                DataPreprocessingConfig, DataTransformationConfig)
 
 
 class ConfigurationManager:
@@ -104,3 +104,26 @@ class ConfigurationManager:
         )
         
         return data_preprocessing_config
+        
+    def get_data_transformation_config(self) -> DataTransformationConfig:
+        
+        """
+        Retrieves the data transformation configuration from the ConfigurationManager object.
+        
+        This method reads the data transformation configuration from the config attribute, 
+        creates the root directory specified in the configuration if it does not exist, 
+        and returns a DataTransformationConfig object containing the configuration details.
+        
+        Returns:
+            DataTransformationConfig: The data transformation configuration object.
+        """
+        config = self.config.data_transformation
+
+        create_directories([config.root_dir])
+
+        data_transformation_config = DataTransformationConfig(
+            root_dir=config.root_dir,
+            data_path=config.data_path,
+        )
+
+        return data_transformation_config
